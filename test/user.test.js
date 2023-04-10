@@ -3,6 +3,7 @@ let supertest = require("supertest");
 let request = supertest(app);
 
 describe("Cadastro de usuário", () => {
+
   test("Deve cadastrar um usuário com sucesso", () => {
     let email = `${Date.now()}@teste.com`;
     let user = {
@@ -22,4 +23,22 @@ describe("Cadastro de usuário", () => {
         fail(err);
       });
   });
+
+  test("Deve impedir que um usuário se cadastre com os dados vazios", () => {
+    let user = {
+      name: "",
+      email: "",
+      password: "",
+    };
+    return request
+      .post("/user")
+      .send(user)
+      .then((res) => {
+        expect(res.statusCode).toEqual(400);
+      })
+      .catch((err) => {
+        fail(err);
+      });
+  });
+
 });

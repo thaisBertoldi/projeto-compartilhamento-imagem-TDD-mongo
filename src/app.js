@@ -24,6 +24,12 @@ app.post('/user', async (req, res) => {
         email: req.body.email,
         password: req.body.password
     });
+
+    if (!req.body.name, !req.body.email, !req.body.password) {
+        res.sendStatus(400);
+        return;
+    }
+
     try {
         await newUser.save();
         res.json({ email: req.body.email });
