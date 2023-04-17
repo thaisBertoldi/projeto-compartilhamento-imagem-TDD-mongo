@@ -105,4 +105,34 @@ describe("Autenticacao", () => {
       fail(err);
     });
   });
+
+  test("Deve impedir um usuario não cadastrado de se logar", () => {
+    return request.post("/auth")
+    .send({
+      email: "qualquercoisa@teste.com",
+      password: "qualquersenhatbm"
+    })
+    .then(res => {
+      expect(res.statusCode).toEqual(403);
+      expect(res.body.errors.email).toEqual("Email não cadastrado");
+    })
+    .catch(err => {
+      fail(err);
+    });
+  });
+
+  test("Deve impedir que um usuário se logue com a senha errada", () => {
+    return request.post("/auth")
+    .send({
+      email: mainUser.email,
+      password: "qualquersenhatbm"
+    })
+    .then(res => {
+      expect(res.statusCode).toEqual(403);
+      expect(res.body.errors.password).toEqual("Senha incorreta");
+    })
+    .catch(err => {
+      fail(err);
+    });
+  });
 });
